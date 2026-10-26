@@ -8,9 +8,16 @@ set(CMAKE_CXX_COMPILE_FEATURES OFF)
 find_package(OpenGL REQUIRED)
 find_package(glfw3 REQUIRED)
 
-add_executable(hello_triangle  main.cpp)
+add_executable(hello_triangle  triangle.cpp)
+
+add_executable(2_triangle  2triangle.cpp)
+
 
 target_link_libraries(hello_triangle PRIVATE
+    OpenGL::GL glfw  glad_core
+)   
+
+target_link_libraries(2_triangle PRIVATE
     OpenGL::GL glfw  glad_core
 )   
 

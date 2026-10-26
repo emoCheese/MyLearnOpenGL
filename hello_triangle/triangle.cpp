@@ -114,7 +114,7 @@ int main(int, char**)
 
 
 	// set up vertex data (and buffer(s)) and configure vertex attributes
-    	// ------------------------------------------------------------------
+	// ------------------------------------------------------------------
 	/// VAO 顶点数组对象
 	/// 绘制三角形，指定三个顶点
     	const float vertices[] = {
@@ -123,7 +123,6 @@ int main(int, char**)
 		0.5f, -0.5f, 0.0f,
 		0.0f,  0.5f, 0.0f
     	};
-
 	
 	/// 生成一个带有 ID 的 顶点缓冲对象 VBO，
 	unsigned int VBO, VAO;
