@@ -16,6 +16,7 @@ target_link_libraries(hello_shader PRIVATE
 )   
 
 add_executable(more_attribe more_attribe.cpp shader.h shader.cpp)
+
 target_link_libraries(more_attribe PRIVATE
     OpenGL::GL glfw  glad_core
 )   
@@ -28,4 +29,22 @@ add_custom_command(TARGET more_attribe POST_BUILD
         "$<TARGET_FILE_DIR:more_attribe>"
     COMMENT "Copying shaders to $<TARGET_FILE_DIR:more_attribe>"
 )
+
+
+
+add_executable(hello_shader_exercise1 hello_shader_exercise1.cpp shader.h shader.cpp)
+
+target_link_libraries(hello_shader_exercise1 PRIVATE
+    OpenGL::GL glfw  glad_core
+)   
+
+# 使用生成器表达式 $<TARGET_FILE_DIR:MyApp> 精确定位可执行文件所在目录
+add_custom_command(TARGET hello_shader_exercise1 POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy
+        "${CMAKE_CURRENT_SOURCE_DIR}/Shader.vs"
+        "${CMAKE_CURRENT_SOURCE_DIR}/Shader.fs"
+        "$<TARGET_FILE_DIR:hello_shader_exercise1>"
+    COMMENT "Copying shaders to $<TARGET_FILE_DIR:hello_shader_exercise1>"
+)
+
 
