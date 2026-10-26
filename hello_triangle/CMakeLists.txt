@@ -12,6 +12,10 @@ add_executable(hello_triangle  triangle.cpp)
 
 add_executable(2_triangle  2triangle.cpp)
 
+add_executable(hello_triangle_exercise1 hello_triangle_exercise1.cpp)
+
+add_executable(hello_triangle_exercise2 hello_triangle_exercise2.cpp)
+
 
 target_link_libraries(hello_triangle PRIVATE
     OpenGL::GL glfw  glad_core
@@ -21,4 +25,11 @@ target_link_libraries(2_triangle PRIVATE
     OpenGL::GL glfw  glad_core
 )   
 
+target_link_libraries(hello_triangle_exercise1 PRIVATE
+    OpenGL::GL glfw  glad_core
+)   
+
+target_link_libraries(hello_triangle_exercise2 PRIVATE
+    OpenGL::GL glfw  glad_core
+)   
 

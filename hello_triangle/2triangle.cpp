@@ -24,6 +24,13 @@ const char* fragmentShaderSource =
 	"	FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
 	"}\0";
 
+const char* fragmentShaderSource2 = 
+	"#version 460 core\n"
+	"out vec4 FragColor;\n"
+	"void main() {\n"
+	"	FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
+	"}\0";
+
 int main(int, char**)
 {
 	/// 初始化窗口
