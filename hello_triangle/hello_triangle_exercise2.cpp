@@ -152,6 +152,7 @@ int main(int, char**)
 	glEnableVertexAttribArray(0);
 
 
+	/// 绑定第二个 VAO，无需解绑，因为不是同一个VAO
 	glBindVertexArray(VAOs[1]);
 	glBindBuffer(GL_ARRAY_BUFFER, VBOs[1]);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(secondTriangle), secondTriangle, GL_STATIC_DRAW);
