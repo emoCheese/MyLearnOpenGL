@@ -127,6 +127,7 @@ int main(int, char**)
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * float_size, (void*)(3 * float_size));
 	glEnableVertexAttribArray(1);
 
+	/// 传给 顶点着色器的 vec2 aTexCoord，然后再传给 片段着色器
 	glVertexAttribPointer(
 		2, 2,
 		GL_FLOAT,
@@ -142,14 +143,22 @@ int main(int, char**)
 	auto image = readImage("container.jpg");
 	if (image.data == nullptr) 
 	{
-		std::cerr << "Failed to load texture\n";
+		std::cerr << "Failed to load image container\n";
+	}
+
+	auto image_face = readImage("awesomeface.png");
+	if (image.data == nullptr) 
+	{
+		std::cerr << "Failed to load face image\n";
 	}
 
 	// 生成纹理 纹理也是使用ID引用的
-	unsigned int texture;
-	glGenTextures(1, &texture);
+	unsigned int texture1, texture2;
+	glGenTextures(1, &texture1);
+	glGenTextures(1, &texture2);
 
-	glBindTexture(GL_TEXTURE_2D, texture);
+	glBindTexture(GL_TEXTURE_2D, texture1);
+	glBindTexture(GL_TEXTURE_2D, texture2);
 
 	// 为当前绑定的纹理对象设置环绕、过滤方式
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);   
@@ -178,6 +187,15 @@ int main(int, char**)
 	stbi_image_free(image.data);
 
 
+
+	glTexImage2D(
+		GL_TEXTURE_2D, 0, GL_RGB, 
+		image_face.width, image_face.height, 
+		0, GL_RGBA, GL_UNSIGNED_BYTE, image_face.data
+	);
+	glGenerateMipmap(GL_TEXTURE_2D);
+
+
 	// 请注意，这种操作是允许的。glVertexAttribPointer的调用会将VBO注册为该顶点属性所对应的顶点缓冲区对象。这样一来，我们之后就可以安全地解除该VBO的绑定。
     	// glBindBuffer(GL_ARRAY_BUFFER, 0); 
 
@@ -201,7 +219,8 @@ int main(int, char**)
 
 		shader.use();
 
-		glBindTexture(GL_TEXTURE_2D, texture);
+		/// 会自动把纹理赋值给片段着色器的采样器 uniform sampler2D ourTexture，不清楚原理
+		glBindTexture(GL_TEXTURE_2D, texture1);
 		glBindVertexArray(VAO);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 

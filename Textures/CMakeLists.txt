@@ -24,6 +24,7 @@ add_custom_command(TARGET textures POST_BUILD
         "${CMAKE_CURRENT_SOURCE_DIR}/Shader.vs"
         "${CMAKE_CURRENT_SOURCE_DIR}/Shader.fs"
         "${CMAKE_CURRENT_SOURCE_DIR}/container.jpg"
+        "${CMAKE_CURRENT_SOURCE_DIR}/awesomeface.png"
         "$<TARGET_FILE_DIR:textures>"
     COMMENT "Copying shaders to $<TARGET_FILE_DIR:textures>"
 )
