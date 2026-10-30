@@ -40,6 +40,9 @@ const char* fragmentShaderSource =
 	"	FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
 	"}\0";
 
+
+static float alpha = 0.2;
+
 int main(int, char**)
 {
     	std::cout << "Hello, from hello_triangle!\n";
@@ -80,6 +83,14 @@ int main(int, char**)
 	// ------------------------------------------------------------------
 	/// VAO 顶点数组对象
 	/// 绘制三角形，指定三个顶点
+	// constexpr float vertices[] = {
+	// 	//     ---- 位置 ----       		---- 颜色 ----     		- 纹理坐标 -
+	// 	0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   0.55f, 0.55f,   // 右上
+	// 	0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   0.55f, 0.45f,   // 右下
+	// 	-0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.45f, 0.45f,   // 左下
+	// 	-0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.45f, 0.55f    // 左上
+	// };
+
 	constexpr float vertices[] = {
 		//     ---- 位置 ----       		---- 颜色 ----     		- 纹理坐标 -
 		0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // 右上
@@ -87,6 +98,7 @@ int main(int, char**)
 		-0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,   // 左下
 		-0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f    // 左上
 	};
+
 
 	constexpr unsigned int indices[] = {  
 		0, 1, 3, // first triangle
@@ -140,25 +152,17 @@ int main(int, char**)
 
 	/// 纹理加载生成
 	/// =================================================
+	stbi_set_flip_vertically_on_load(true);
 	auto image = readImage("container.jpg");
 	if (image.data == nullptr) 
 	{
 		std::cerr << "Failed to load image container\n";
 	}
 
-	auto image_face = readImage("awesomeface.png");
-	if (image.data == nullptr) 
-	{
-		std::cerr << "Failed to load face image\n";
-	}
-
 	// 生成纹理 纹理也是使用ID引用的
 	unsigned int texture1, texture2;
 	glGenTextures(1, &texture1);
-	glGenTextures(1, &texture2);
-
 	glBindTexture(GL_TEXTURE_2D, texture1);
-	glBindTexture(GL_TEXTURE_2D, texture2);
 
 	// 为当前绑定的纹理对象设置环绕、过滤方式
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);   
@@ -183,17 +187,36 @@ int main(int, char**)
 
 	/// 为当前绑定的纹理自动生成所有需要的多级渐远纹理
 	glGenerateMipmap(GL_TEXTURE_2D);
-
 	stbi_image_free(image.data);
 
+	auto image_face = readImage("awesomeface.png");
+	if (image_face.data == nullptr) 
+	{
+		std::cerr << "Failed to load face image\n";
+	}
 
+	glGenTextures(1, &texture2);
+	glBindTexture(GL_TEXTURE_2D, texture2);
+	// 为当前绑定的纹理对象设置环绕、过滤方式
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);   
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
+	/// 这里是 RGBA 的图像
 	glTexImage2D(
-		GL_TEXTURE_2D, 0, GL_RGB, 
-		image_face.width, image_face.height, 
-		0, GL_RGBA, GL_UNSIGNED_BYTE, image_face.data
+		GL_TEXTURE_2D, 0, GL_RGBA,
+		image_face.width, image_face.height, 0,
+		GL_RGBA, GL_UNSIGNED_BYTE, image_face.data
 	);
+
+	/// 为当前绑定的纹理自动生成所有需要的多级渐远纹理
 	glGenerateMipmap(GL_TEXTURE_2D);
+
+	
+	stbi_image_free(image_face.data);
+
+
 
 
 	// 请注意，这种操作是允许的。glVertexAttribPointer的调用会将VBO注册为该顶点属性所对应的顶点缓冲区对象。这样一来，我们之后就可以安全地解除该VBO的绑定。
@@ -206,8 +229,11 @@ int main(int, char**)
 	Shader shader("Shader.vs", "Shader.fs");
 	
 
-	glBindVertexArray(VAO);
+	shader.use();
+	glUniform1i(glGetUniformLocation(shader.ID, "texture1"), 0); // 手动设置
+	shader.setInt("texture2", 1); // 或者使用着色器类设置
 
+	
 	while (!glfwWindowShouldClose(window))
 	{
 		processInput(window);
@@ -217,10 +243,15 @@ int main(int, char**)
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
-		shader.use();
 
-		/// 会自动把纹理赋值给片段着色器的采样器 uniform sampler2D ourTexture，不清楚原理
+		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, texture1);
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_2D, texture2);
+		
+		
+		shader.use();
+		shader.setFloat("alpha", alpha);
 		glBindVertexArray(VAO);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
@@ -233,6 +264,7 @@ int main(int, char**)
 	// ------------------------------------------------------------------------
 	glDeleteVertexArrays(1, &VAO);
 	glDeleteBuffers(1, &VBO);
+	glDeleteBuffers(1, &EBO);
 
 	glfwTerminate();
 	return 0;
@@ -249,6 +281,16 @@ void processInput(GLFWwindow *window)
 {
     	if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         	glfwSetWindowShouldClose(window, true);
+	if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) 
+	{
+		alpha += 0.001f;
+		if (alpha >= 1.0f) alpha = 1.0f;
+	}
+	if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
+	{
+		alpha -= 0.001f;
+		if (alpha <= 0.0f) alpha = 0.0f;
+	}
 }
 
 Image readImage(const char* path) 
