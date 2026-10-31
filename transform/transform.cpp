@@ -5,6 +5,7 @@
 #include <GLFW/glfw3.h>
 #include <iostream>
 #include "glm/ext/matrix_transform.hpp"
+#include "glm/ext/vector_float3.hpp"
 #include "shader.h"
 #include <format>
 
@@ -254,27 +255,51 @@ int main(int, char**)
 		glActiveTexture(GL_TEXTURE1);
 		glBindTexture(GL_TEXTURE_2D, texture2);
 
+		/// 先旋转再平移: 
+		// 记住，矩阵乘法的应用是反向进行的。此时，首先会对容器进行平移，使其位于屏幕的右下角位置。之后，旋转操作会应用于这个经过平移后的容器。
 
-                /// 创建变换将矩阵
+		// 旋转变换也被称为基变换，当我们深入研究线性代数时就会了解到这一点。由于我们改变了容器的基向量，因此后续的平移操作将基于新的基向量来进行。
+		// 一旦向量发生了轻微的旋转，那么垂直方向上的平移也会随之发生相应的移动。
+
+		// 如果我们先应用旋转操作，那么旋转就会围绕旋转原点(0,0,0)进行。
+		// 但由于容器首先经历了平移操作，其旋转原点已经不再为(0,0,0)，因此看起来就像容器在围绕场景的原点旋转一样。
+
+		// 如果你在理解这一点时遇到困难，不用担心，没有关系。如果你尝试使用变换函数，很快就会掌握其用法；关键在于练习和经验积累。
+
+
+                // /// 创建变换将矩阵
+                // glm::mat4 trans = glm::mat4(1.0f);
+		// /// 平移
+                // trans = glm::rotate(trans, (float)glfwGetTime(), glm::vec3(0.0, 0.0, 1.0));
+		// trans = glm::translate(trans, glm::vec3(0.5f, -0.5f, 0.0f));
+                // // trans = glm::scale(trans, glm::vec3(0.5, 0.5, 0.5));
+
+		/// 创建变换将矩阵
                 glm::mat4 trans = glm::mat4(1.0f);
-		/// 平移
 		trans = glm::translate(trans, glm::vec3(0.5f, -0.5f, 0.0f));
                 trans = glm::rotate(trans, (float)glfwGetTime(), glm::vec3(0.0, 0.0, 1.0));
+		
                 // trans = glm::scale(trans, glm::vec3(0.5, 0.5, 0.5));
 		
 		
                 
 		shader.use();
                 unsigned int transformLoc = glGetUniformLocation(shader.ID, "transform");
-                if (transformLoc == -1) {
-                        // std::cerr << "transform 没有找到\n";
-                }
-                        
                 glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(trans));
 
 		shader.setFloat("alpha", alpha);
                 
 		glBindVertexArray(VAO);
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+
+		/// 第二个
+		trans = glm::mat4(1.0f);
+		trans = glm::translate(trans, glm::vec3(-0.5f, 0.5f, 0.0f));
+		auto scaleAmount = static_cast<float>(sin(glfwGetTime()));
+		/// 这里第三个参数 Z 为 0 似乎也没事
+		trans = glm::scale(trans, glm::vec3(scaleAmount, scaleAmount, scaleAmount));  
+		glUniformMatrix4fv(transformLoc, 1, GL_FALSE, &trans[0][0]);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
 
