@@ -1,2 +1,3 @@
 add_subdirectory(CoordinateSystems)
+add_subdirectory(coordinate_systems_multiple)
 add_subdirectory(coordinate_systems_depth)
