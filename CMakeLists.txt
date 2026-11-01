@@ -11,6 +11,7 @@ find_package(glfw3 REQUIRED)
 
 add_subdirectory(glad_core)
 add_subdirectory(glm)
+add_subdirectory(Shader)
 add_subdirectory(hello_window)
 add_subdirectory(hello_triangle)
 add_subdirectory(hello_shader)
