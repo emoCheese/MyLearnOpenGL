@@ -262,7 +262,9 @@ int main(int, char**)
 
         /// 投影矩阵，因为很少需要变化，所以设置在循环外
         glm::mat4 projection = glm::mat4(1.0f);
-        projection = glm::perspective(glm::radians(45.0f), SCR_WIDTH / SCR_HEIGHT, 0.1f, 100.0f);
+	auto aspect = SCR_WIDTH / SCR_HEIGHT;
+	// aspect = 4 / 3;
+        projection = glm::perspective(glm::radians(45.0f), aspect, 0.1f, 100.0f);
         shader.setMat4("projection", projection);
 
 	
@@ -296,7 +298,7 @@ int main(int, char**)
                 /// 观察矩阵
                 glm::mat4 view = glm::mat4(1.0f);
                 // 注意，我们将矩阵向我们要进行移动场景的反方向移动。
-                view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
+                view = glm::translate(view, glm::vec3(-3.0f, 2.0f, -9.0f));
 
 
                 shader.setMat4("model", model);
