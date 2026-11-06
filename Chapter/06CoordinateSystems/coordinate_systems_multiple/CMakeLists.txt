@@ -1,9 +1,7 @@
 add_executable(coordinate_systems_multiple coordinate_systems_multiple.cpp)
-target_include_directories(coordinate_systems_multiple PRIVATE
-    ${CMAKE_CURRENT_SOURCE_DIR}/../../stb_image/
-)
+
 target_link_libraries(coordinate_systems_multiple PRIVATE
-        OpenGL::GL glfw glad_core glm::glm my_shader
+        OpenGL::GL glfw glad_core glm::glm my_shader stb_image my_gl_utility
 )
 
 # 使用生成器表达式 $<TARGET_FILE_DIR:MyApp> 精确定位可执行文件所在目录

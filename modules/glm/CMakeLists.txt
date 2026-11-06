@@ -46,7 +46,7 @@ add_library(glm-header-only INTERFACE)
 add_library(glm::glm-header-only ALIAS glm-header-only)
 
 target_include_directories(glm-header-only INTERFACE
-	"$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}>"
+	"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/..>"
 	"$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>"
 )
 

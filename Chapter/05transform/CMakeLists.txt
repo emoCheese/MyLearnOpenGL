@@ -1,11 +1,7 @@
 add_executable(transform transform.cpp shader.h shader.cpp)
 
-target_include_directories(transform PRIVATE
-    ${CMAKE_CURRENT_SOURCE_DIR}/../stb_image/
-)
-
 target_link_libraries(transform PRIVATE
-    OpenGL::GL glfw glad_core glm::glm
+    OpenGL::GL glfw glad_core glm::glm stb_image
 )
 
 

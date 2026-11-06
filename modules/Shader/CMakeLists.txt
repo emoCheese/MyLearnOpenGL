@@ -6,5 +6,5 @@ target_include_directories(my_shader PUBLIC
 
 target_link_libraries(my_shader
         PRIVATE
-                glad_core OpenGL::GL glfw glm::glm
+                glad_core OpenGL::GL glm::glm glfw 
 )

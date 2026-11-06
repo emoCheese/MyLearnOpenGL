@@ -9,12 +9,9 @@ find_package(glfw3 REQUIRED)
 
 add_executable(textures textures.cpp shader.h shader.cpp)
 
-target_include_directories(textures PRIVATE
-    ${CMAKE_CURRENT_SOURCE_DIR}/../stb_image/
-)
 
 target_link_libraries(textures PRIVATE
-    OpenGL::GL glfw glad_core
+    OpenGL::GL glfw glad_core stb_image
 )
 
 
