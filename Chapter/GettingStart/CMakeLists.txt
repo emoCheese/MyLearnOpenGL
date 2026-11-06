@@ -1,0 +1,7 @@
+add_subdirectory(01hello_window)
+add_subdirectory(02hello_triangle)
+add_subdirectory(03hello_shader)
+add_subdirectory(04Textures)
+add_subdirectory(05transform)
+add_subdirectory(06CoordinateSystems)
+add_subdirectory(07Camera)
