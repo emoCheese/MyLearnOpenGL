@@ -10,7 +10,6 @@
 
 #include <filesystem>
 #include <string>
-#include <vector>
 #include <cstddef>
 
 bool isFilePath(const char* path) {
@@ -102,27 +101,12 @@ Shader::Shader(const char* vertexPath, const char* fragmentPath)
 	// 着色器源码附加到着色器对象上，编译它
 	glShaderSource(vertex, 1, &vShaderCode, NULL);
 	glCompileShader(vertex);
-
-	// 打印编译错误（如果有的话）
-	glGetShaderiv(vertex, GL_COMPILE_STATUS, &success);
-	if(!success)
-	{
-		glGetShaderInfoLog(vertex, 512, NULL, infoLog);
-		std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
-	};
-
+	checkCompileErrors(vertex, "VERTEX");
 	
 
 	glShaderSource(fragment, 1, &fShaderCode, nullptr);
 	glCompileShader(fragment);
-	// 打印编译错误（如果有的话）
-	glGetShaderiv(fragment, GL_COMPILE_STATUS, &success);
-	if(!success)
-	{
-		std::memset(infoLog, '\0', sizeof(infoLog));
-		glGetShaderInfoLog(fragment, 512, NULL, infoLog);
-		std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
-	};
+	checkCompileErrors(fragment, "FRAGMENT");
 
 	// 着色器程序
 	ID = glCreateProgram();
@@ -175,9 +159,69 @@ void Shader::setFloat(const std::string& name, float value) const
 	glUniform1f(glGetUniformLocation(ID, name.c_str()), value);
 }
 
-void Shader::setMat4(const std::string& name, const glm::mat4& value)
+void Shader::setMat4(const std::string& name, const glm::mat4& value) const
 {
 	auto Loc = glGetUniformLocation(ID, name.c_str());
         glUniformMatrix4fv(Loc, 1, GL_FALSE, glm::value_ptr(value));
 }
 
+void Shader::setMat3(const std::string &name, const glm::mat3 &mat) const 
+{
+  glUniformMatrix3fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE,
+                     &mat[0][0]);
+}
+void Shader::setMat2(const std::string &name, const glm::mat2 &mat) const 
+{
+  glUniformMatrix2fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE,
+                     &mat[0][0]);
+}
+void Shader::setVec4(const std::string &name, float x, float y, float z, float w) const 
+{
+	glUniform4f(glGetUniformLocation(ID, name.c_str()), x, y, z, w);
+}
+void Shader::setVec4(const std::string &name, const glm::vec4 &value) const 
+{
+  	glUniform4fv(glGetUniformLocation(ID, name.c_str()), 1, &value[0]);
+}
+void Shader::setVec3(const std::string &name, float x, float y, float z) const 
+{
+  	glUniform3f(glGetUniformLocation(ID, name.c_str()), x, y, z);
+}
+void Shader::setVec3(const std::string &name, const glm::vec3 &value) const 
+{
+  	glUniform3fv(glGetUniformLocation(ID, name.c_str()), 1, &value[0]);
+}
+void Shader::setVec2(const std::string &name, float x, float y) const 
+{
+  	glUniform2f(glGetUniformLocation(ID, name.c_str()), x, y);
+}
+void Shader::setVec2(const std::string &name, const glm::vec2 &value) const 
+{
+  	glUniform2fv(glGetUniformLocation(ID, name.c_str()), 1, &value[0]);
+}
+void Shader::checkCompileErrors(GLuint shader, std::string type) 
+{
+	GLint success;
+	GLchar infoLog[1024];
+	if (type != "PROGRAM") {
+	glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
+	if (!success) {
+		glGetShaderInfoLog(shader, 1024, NULL, infoLog);
+		std::cerr
+			<< "ERROR::SHADER_COMPILATION_ERROR of type: " << type << "\n"
+			<< infoLog
+			<< "\n -- --------------------------------------------------- -- "
+			<< std::endl;
+	}
+	} else {
+		glGetProgramiv(shader, GL_LINK_STATUS, &success);
+		if (!success) {
+			glGetProgramInfoLog(shader, 1024, NULL, infoLog);
+			std::cerr
+				<< "ERROR::PROGRAM_LINKING_ERROR of type: " << type << "\n"
+				<< infoLog
+				<< "\n -- --------------------------------------------------- -- "
+				<< std::endl;
+		}
+	}
+}
