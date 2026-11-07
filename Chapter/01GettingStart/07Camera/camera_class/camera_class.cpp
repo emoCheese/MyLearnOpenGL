@@ -43,11 +43,9 @@ float deltaTime = 0.0f; // 当前帧与上一帧的时间差
 float lastFrame = 0.0f; // 上一帧的时间
 
 
-
-
 int main(int, char**)
 {
-    	std::cout << "矩阵变换!\n";
+    	std::cout << "摄像机类!\n";
 
 
 	/// 初始化窗口

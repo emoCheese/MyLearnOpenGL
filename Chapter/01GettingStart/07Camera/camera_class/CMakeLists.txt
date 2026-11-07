@@ -1,4 +1,4 @@
-add_executable(camera_class camera_class.cpp shader_m.h camera.h)
+add_executable(camera_class camera_class.cpp camera.h)
 
 
 target_link_libraries(camera_class PRIVATE

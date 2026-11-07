@@ -4,8 +4,6 @@
 #include <string>
 
 
-
-
 class Shader
 {
 public:

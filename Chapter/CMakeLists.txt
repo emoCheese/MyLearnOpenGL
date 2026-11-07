@@ -1,1 +1,2 @@
-add_subdirectory(GettingStart)
+add_subdirectory(01GettingStart)
+add_subdirectory(02Lighting)
