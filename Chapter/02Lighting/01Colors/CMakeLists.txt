@@ -2,7 +2,7 @@ add_executable(colors colors.cpp camera.h)
 
 
 target_link_libraries(colors PRIVATE
-        OpenGL::GL glfw glad_core glm::glm my_shader stb_image my_gl_utility
+        OpenGL::GL glfw glad_core glm::glm my_shader stb_image my_gl_utility my_glwindow
 )
 
 # 使用生成器表达式 $<TARGET_FILE_DIR:MyApp> 精确定位可执行文件所在目录

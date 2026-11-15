@@ -1,5 +1,4 @@
 #include <array>
-#include <filesystem>
 #include <glad/glad.h>
 #include <GL/gl.h>
 #include <GL/glext.h>
@@ -11,6 +10,7 @@
 #include "shader.h"
 #include <span>
 #include <utility.h>
+#include "my_glwindow.h"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
@@ -41,36 +41,13 @@ glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
 
 int main(int argc, char* argv[])
 {
+        glWindow window("LearnOpenGL", SCR_WIDTH, SCR_HEIGHT);
 
-	/// 初始化窗口
-	// glfw: initialize and configure
-	// ------------------------------
-	glfwInit();
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+        window.initWindow(4, 6);
 
-#ifdef __APPLE__
-    	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-#endif
-        auto window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "LearnOpenGL", nullptr, nullptr);
-        if (!window) 
-        {
-                std::cerr << "Failed to Create GLFW window\n";
-                glfwTerminate();
-                return -1;
-        }
-
-        /// 设置GLFW 上下文为 window
-        glfwMakeContextCurrent(window);
-
-        /// 注册回调函数
-	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
-	glfwSetCursorPosCallback(window, mouse_callback);
-    	glfwSetScrollCallback(window, scroll_callback);
-
-        /// 设置 GLFW 捕捉鼠标事件
-        glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+        window.setWindowSizeCallback(framebuffer_size_callback);
+        window.setMouseCallback(mouse_callback);
+        window.setScrollCallback(scroll_callback);
 
         // GLAD是用来管理OpenGL的函数指针的，所以在调用任何OpenGL的函数之前我们需要初始化GLAD。
         if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
@@ -155,12 +132,11 @@ int main(int argc, char* argv[])
         glEnableVertexAttribArray(0);
 
 
-	while (!glfwWindowShouldClose(window))
-	{
-		float currentFrame = glfwGetTime();
+        window.start([&]() {
+                float currentFrame = glfwGetTime();
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
-		processInput(window);
+		processInput(window.window());
 
 		// render
 		// ------
@@ -204,10 +180,8 @@ int main(int argc, char* argv[])
 
 		glBindVertexArray(lightCubeVAO);
 		glDrawArrays(GL_TRIANGLES, 0, 36);
+        });
 
-		glfwSwapBuffers(window);
-		glfwPollEvents();
-	}
 
 	// optional: de-allocate all resources once they've outlived their purpose:
 	// ------------------------------------------------------------------------
@@ -215,7 +189,6 @@ int main(int argc, char* argv[])
         glDeleteVertexArrays(1, &lightCubeVAO);
 	glDeleteBuffers(1, &VBO);
 
-	glfwTerminate();
         return 0;
 }
 
