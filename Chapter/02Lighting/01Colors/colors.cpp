@@ -179,10 +179,12 @@ int main(int argc, char* argv[])
 		lightingShader.setMat4("projection", projection);
 
                 /// 观察矩阵
+                /// 把世界坐标系“搬”到相机坐标系
                 const glm::mat4 view = camera.GetViewMatrix();
                 lightingShader.setMat4("view", view);
 
-                // world transformation
+                /// world transformation
+                /// 把模型摆到世界里的位置（平移/旋转/缩放）
                 glm::mat4 model = glm::mat4(1.0f);
                 lightingShader.setMat4("model", model);
 
@@ -196,8 +198,8 @@ int main(int argc, char* argv[])
                 lightCubeShader.setMat4("view", view);
 
                 model = glm::mat4(1.0f);
-                model = glm::translate(model, lightPos);
-                model = glm::scale(model, glm::vec3(0.2f)); // a smaller cube
+                model = glm::translate(model, lightPos);                /// 平移到光源位置           
+                model = glm::scale(model, glm::vec3(0.2f));     /// 缩小到 0.2 倍
                 lightCubeShader.setMat4("model", model);
 
 		glBindVertexArray(lightCubeVAO);
