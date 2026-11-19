@@ -1,19 +1,9 @@
 #pragma once
 #include <glad/glad.h>
 #include <GL/gl.h>
-#include <GL/glext.h>
 #include <GLFW/glfw3.h>
 #include <utility>
 #include <string>
-
-
-	// /// 初始化窗口
-	// // glfw: initialize and configure
-	// // ------------------------------
-	// glfwInit();
-	// glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-	// glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
-	// glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 using WindowSizeCallback = void(*)(GLFWwindow* window, int width, int height);
 using MouseCallback = void(*)(GLFWwindow* window, double xposIn, double yposIn);
@@ -51,8 +41,8 @@ public:
                 {
                         std::forward<Func>(fn)();
 
-                	glfwSwapBuffers(m_window);
-		        glfwPollEvents();
+                	    glfwSwapBuffers(m_window);
+		                glfwPollEvents();
                 }
         }
 

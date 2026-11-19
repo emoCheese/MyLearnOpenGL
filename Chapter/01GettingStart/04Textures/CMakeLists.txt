@@ -5,7 +5,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_COMPILE_FEATURES OFF)
 
 find_package(OpenGL REQUIRED)
-find_package(glfw3 REQUIRED)
+# glfw3 的 glfw 目标由根 CMakeLists.txt 统一提供
 
 add_executable(textures textures.cpp shader.h shader.cpp)
 

@@ -1,7 +1,6 @@
 #include <array>
 #include <glad/glad.h>
 #include <GL/gl.h>
-#include <GL/glext.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
 #include "camera.h"
@@ -38,6 +37,19 @@ float lastFrame = 0.0f; // 上一帧的时间
 glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
 
 
+bool gladInit()
+{
+    // GLAD是用来管理OpenGL的函数指针的，所以在调用任何OpenGL的函数之前我们需要初始化GLAD。
+    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+    {
+        std::cerr << "Failed to initialize GLAD\n";
+        return false;
+    }
+
+    glEnable(GL_DEPTH_TEST);
+    return  true;
+}
+
 
 int main(int argc, char* argv[])
 {
@@ -49,14 +61,9 @@ int main(int argc, char* argv[])
         window.setMouseCallback(mouse_callback);
         window.setScrollCallback(scroll_callback);
 
-        // GLAD是用来管理OpenGL的函数指针的，所以在调用任何OpenGL的函数之前我们需要初始化GLAD。
-        if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
-        {
-                std::cerr << "Failed to initialize GLAD\n";
-                return -1;
+        if (!gladInit()) {
+            return -1;
         }
-
-        glEnable(GL_DEPTH_TEST);
 
         // build and compile our shader zprogram
         // ------------------------------------

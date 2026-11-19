@@ -5,6 +5,7 @@
 #include <iostream>
 #include "shader.h"
 #include <format>
+#include <span>
 #include <sys/types.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>

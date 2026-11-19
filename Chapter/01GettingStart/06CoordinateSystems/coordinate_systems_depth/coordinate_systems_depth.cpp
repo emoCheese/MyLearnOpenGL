@@ -6,6 +6,7 @@
 #include <iostream>
 #include "shader.h"
 #include <format>
+#include <span>
 #include <sys/types.h>
 
 #define STB_IMAGE_IMPLEMENTATION
