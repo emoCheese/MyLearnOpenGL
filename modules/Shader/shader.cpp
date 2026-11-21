@@ -8,10 +8,6 @@
 #include <filesystem>
 #include <system_error>
 
-#include <filesystem>
-#include <string>
-#include <cstddef>
-
 bool isFilePath(const char* path) {
     if (path == nullptr || path[0] == '\0') return false; // 空指针或空串
 
@@ -201,8 +197,8 @@ void Shader::setVec2(const std::string &name, const glm::vec2 &value) const
 }
 void Shader::checkCompileErrors(GLuint shader, std::string type) 
 {
-	GLint success;
-	GLchar infoLog[1024];
+	int success;
+	char infoLog[1024];
 	if (type != "PROGRAM") {
 	glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
 	if (!success) {
