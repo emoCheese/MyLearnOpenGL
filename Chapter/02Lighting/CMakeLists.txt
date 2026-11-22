@@ -1,3 +1,4 @@
-add_subdirectory(01Colors)
+﻿add_subdirectory(01Colors)
 add_subdirectory(02BasicLighting)
 add_subdirectory(03Materials)
+add_subdirectory(04Lightingmaps)

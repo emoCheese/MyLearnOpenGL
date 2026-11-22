@@ -1,0 +1,1 @@
+﻿add_subdirectory(lighting_maps_diffuse)
