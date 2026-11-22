@@ -1,1 +1,2 @@
 ﻿add_subdirectory(lighting_maps_diffuse)
+add_subdirectory(lighting_maps_specular)
