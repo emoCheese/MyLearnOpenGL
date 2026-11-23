@@ -139,14 +139,17 @@ int main(int argc, char* argv[])
         
         window.start([&]() {
                 float currentFrame = glfwGetTime();
-		        deltaTime = currentFrame - lastFrame;
-		        lastFrame = currentFrame;
-		        processInput(window.window());
+                deltaTime = currentFrame - lastFrame;
+                lastFrame = currentFrame;
+                processInput(window.window());
 
-		        // render
-		        // ------
-		        glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-		        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+                // render
+                // ------
+                glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+                glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+                lightPos.x = 1.0f + sin(glfwGetTime()) * 2.0f;
+                lightPos.y = sin(glfwGetTime() / 2.0f) * 1.0f;
 
                 // be sure to activate shader when setting uniforms/drawing objects
                 lightingShader.use();
@@ -157,9 +160,9 @@ int main(int argc, char* argv[])
 
                 
 
-		        // pass projection matrix to shader (note that in this case it could change every frame)
-		        glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
-		        lightingShader.setMat4("projection", projection);
+                // pass projection matrix to shader (note that in this case it could change every frame)
+                glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+                lightingShader.setMat4("projection", projection);
 
                 /// 观察矩阵
                 /// 把世界坐标系“搬”到相机坐标系
@@ -182,20 +185,20 @@ int main(int argc, char* argv[])
                 lightCubeShader.setMat4("view", view);
 
                 model = glm::mat4(1.0f);
-                model = glm::translate(model, lightPos);                /// 平移到光源位置           
+                model = glm::translate(model, lightPos);                /// 平移到设定好的光源位置           
                 model = glm::scale(model, glm::vec3(0.2f));     /// 缩小到 0.2 倍
                 lightCubeShader.setMat4("model", model);
 
-		        glBindVertexArray(lightCubeVAO);
-		        glDrawArrays(GL_TRIANGLES, 0, 36);
+                glBindVertexArray(lightCubeVAO);
+                glDrawArrays(GL_TRIANGLES, 0, 36);
         });
 
 
-	    // optional: de-allocate all resources once they've outlived their purpose:
-	    // ------------------------------------------------------------------------
-	    glDeleteVertexArrays(1, &cubeVAO);
+        // optional: de-allocate all resources once they've outlived their purpose:
+        // ------------------------------------------------------------------------
+        glDeleteVertexArrays(1, &cubeVAO);
         glDeleteVertexArrays(1, &lightCubeVAO);
-	    glDeleteBuffers(1, &VBO);
+        glDeleteBuffers(1, &VBO);
 
         return 0;
 }
