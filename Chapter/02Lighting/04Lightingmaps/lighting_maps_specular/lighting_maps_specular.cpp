@@ -36,6 +36,7 @@ float lastFrame = 0.0f; // 上一帧的时间
 
 // lighting
 glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
+float lightSpeed = 2.0f;                     // 角速度，弧度/秒
 
 
 
@@ -142,15 +143,23 @@ int main(int argc, char* argv[])
 
 	auto diffuseMap = loadTexture("container2.png");
 	auto specularMap = loadTexture("container2_specular.png");
+	auto matrixMap = loadTexture("matrix.jpg");
 
 	lightingShader.use();
 	lightingShader.setInt("material.diffuse", 0);
+	lightingShader.setInt("material.specular", 1);
+	lightingShader.setInt("material.emission", 2);
 
 	window.start([&]() {
 		float currentFrame = glfwGetTime();
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
 		processInput(window.window());
+
+		/// 让光源随时间绕 Y 轴转圈
+		glm::mat4 rot = glm::rotate(glm::mat4(1.0f), currentFrame * lightSpeed, glm::vec3(0.0f, 1.0f, 0.0f));
+		glm::vec3 curLightPos = glm::vec3(rot * glm::vec4(lightPos, 1.0f));
+
 
 		// render
 		// ------
@@ -160,7 +169,7 @@ int main(int argc, char* argv[])
 
 		// be sure to activate shader when setting uniforms/drawing objects
 		lightingShader.use();
-		lightingShader.setVec3("light.position", lightPos);
+		lightingShader.setVec3("light.position", curLightPos);
 		lightingShader.setVec3("viewPos", camera.Position);
 
 		/// 设置光源属性
@@ -172,7 +181,7 @@ int main(int argc, char* argv[])
 		/// 设置材质属性
 		lightingShader.setVec3("material.ambient", 1.0f, 0.5f, 0.31f);
 		lightingShader.setInt("material.specular", 1);
-		lightingShader.setFloat("material.shininess", 32.0f);
+		lightingShader.setFloat("material.shininess", 64.0f);
 
 
 
@@ -198,6 +207,9 @@ int main(int argc, char* argv[])
 		glActiveTexture(GL_TEXTURE1);
 		glBindTexture(GL_TEXTURE_2D, specularMap);
 
+		glActiveTexture(GL_TEXTURE2);
+		glBindTexture(GL_TEXTURE_2D, matrixMap);
+
 		// render the cube
 		glBindVertexArray(cubeVAO);
 		glDrawArrays(GL_TRIANGLES, 0, 36);
@@ -208,7 +220,7 @@ int main(int argc, char* argv[])
 		lightCubeShader.setMat4("view", view);
 
 		model = glm::mat4(1.0f);
-		model = glm::translate(model, lightPos);                /// 平移到光源位置           
+		model = glm::translate(model, curLightPos);                /// 平移到光源位置           
 		model = glm::scale(model, glm::vec3(0.2f));     /// 缩小到 0.2 倍
 		lightCubeShader.setMat4("model", model);
 

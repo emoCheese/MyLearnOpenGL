@@ -14,6 +14,7 @@ add_custom_command(TARGET lighting_maps_specular POST_BUILD
         "${CMAKE_CURRENT_SOURCE_DIR}/4.1.light_cube.fs.glsl"
         "${CMAKE_CURRENT_SOURCE_DIR}/../container2.png"
         "${CMAKE_CURRENT_SOURCE_DIR}/../container2_specular.png"
+        "${CMAKE_CURRENT_SOURCE_DIR}/../matrix.jpg"
         "$<TARGET_FILE_DIR:lighting_maps_specular>"
     COMMENT "Copying shaders to $<TARGET_FILE_DIR:lighting_maps_specular>"
 )
