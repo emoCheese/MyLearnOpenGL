@@ -1,0 +1,4 @@
+﻿add_subdirectory(5.1light_casters_directional)
+add_subdirectory(5.2light_casters_point)
+add_subdirectory(5.3.light_casters_spot)
+add_subdirectory(5.4.light_casters_spot_soft)

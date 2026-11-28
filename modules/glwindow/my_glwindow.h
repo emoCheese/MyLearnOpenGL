@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <glad/glad.h>
 #include <GL/gl.h>
 #include <GLFW/glfw3.h>
@@ -41,8 +41,8 @@ public:
                 {
                         std::forward<Func>(fn)();
 
-                	    glfwSwapBuffers(m_window);
-		                glfwPollEvents();
+                	glfwSwapBuffers(m_window);
+		        glfwPollEvents();
                 }
         }
 
