@@ -8,14 +8,14 @@ out vec3 Normal;
 uniform mat4 model;
 uniform mat4 view;
 uniform mat4 projection;
-
+ 
 
 void main()
 {
-    /// ½«¶¥µã±ä»»µ½ÊÀ½ç¿Õ¼ä
+    /// å°†é¡¶ç‚¹å˜æ¢åˆ°ä¸–ç•Œç©ºé—´
     FragPos = vec3(model * vec4(aPos, 1.0));
 
-    /// ÊäÈë·¨ÏòÁ¿
+    /// è¾“å…¥æ³•å‘é‡
     Normal = aNormal;  
     
     gl_Position = projection * view * vec4(FragPos, 1.0);

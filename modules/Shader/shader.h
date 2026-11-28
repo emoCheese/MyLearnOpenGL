@@ -7,8 +7,8 @@
 class Shader
 {
 public:
-    // 程序ID
-    unsigned int ID;
+    // 程序ID，构造失败时保持为 0
+    unsigned int ID = 0;
 
     // 构造器读取并构建着色器
     Shader(const char* vertexPath, const char* fragmentPath);
@@ -36,8 +36,9 @@ public:
     void setMat4(const std::string &name, const glm::mat4 &mat) const;
 
     // utility function for checking shader compilation/linking errors.
+    // 返回 true 表示编译/链接成功，false 表示失败。
     // ------------------------------------------------------------------------
-    void checkCompileErrors(GLuint shader, std::string type);
+    bool checkCompileErrors(GLuint shader, const std::string& type) const;
 };
 
 

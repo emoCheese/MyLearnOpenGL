@@ -1,4 +1,4 @@
-﻿#version 460 core
+#version 460 core
 
 /// 此处用 Material 结构体代替 02 小节中硬编码的数值
 struct Material {

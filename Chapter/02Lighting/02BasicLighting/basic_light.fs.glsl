@@ -7,7 +7,7 @@ uniform vec3 lightPos;
 uniform vec3 viewPos;
 
 in vec3 Normal;
-in vec3 FragPos;   /// Ã¿¸öÆ¬¶ÎµÄÊÀ½çÎ»ÖÃ
+in vec3 FragPos;   /// æ¯ä¸ªç‰‡æ®µçš„ä¸–ç•Œä½ç½®
 
 void main()
 {
@@ -15,22 +15,22 @@ void main()
     vec3 ambient = ambientStrength * lightColor;
 
     vec3 norm = normalize(Normal);
-    /// »ñÈ¡¹âµÄ·½Ïò
+    /// è·å–å…‰çš„æ–¹å‘
     vec3 lightDir = normalize(lightPos - FragPos);
 
-    /// ¹âÕÕ·½Ïò Óë ·¨ÏòÁ¿µÄµã³Ë = ¹âÏß·½ÏòÓë·¨ÏßµÄ¼Ğ½Ç
+    /// å…‰ç…§æ–¹å‘ ä¸ æ³•å‘é‡çš„ç‚¹ä¹˜ = å…‰çº¿æ–¹å‘ä¸æ³•çº¿çš„å¤¹è§’
     float diff = max(dot(norm, lightDir), 0.0);
     vec3 diffuse = diff * lightColor;
 
-    /// ¾µÃæÇ¿¶È(Specular Intensity)±äÁ¿
+    /// é•œé¢å¼ºåº¦(Specular Intensity)å˜é‡
     float specularStrength = 0.5;
-    /// ÊÓÏß·½Ïò
+    /// è§†çº¿æ–¹å‘
     vec3 viewDir = normalize(viewPos - FragPos);
 
-    /// ¹âÏß·´Éä·½Ïò
+    /// å…‰çº¿åå°„æ–¹å‘
     vec3 reflectDir = reflect(-lightDir, norm);
 
-    ///  32ÊÇ¸ß¹âµÄ·´¹â¶È
+    ///  32æ˜¯é«˜å…‰çš„åå…‰åº¦
     float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32);
     vec3 specular = specularStrength * spec * lightColor;
 
