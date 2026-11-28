@@ -1,5 +1,5 @@
 add_executable(coordinate_systems_multiple coordinate_systems_multiple.cpp)
-
+target_compile_features(coordinate_systems_multiple PRIVATE cxx_std_20)
 target_link_libraries(coordinate_systems_multiple PRIVATE
         OpenGL::GL glfw glad_core glm::glm my_shader stb_image my_gl_utility
 )

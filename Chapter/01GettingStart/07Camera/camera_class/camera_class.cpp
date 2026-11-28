@@ -8,7 +8,7 @@
 #include "shader.h"
 #include <format>
 #include <sys/types.h>
-
+#include <span>
 /// 在 utility 模块中 已经使用了对应的宏
 #include "stb_image.h"
 
@@ -169,10 +169,8 @@ int main(int, char**)
 	/// 纹理加载生成
 	/// =================================================
 
-	auto container_jpg = std::format("{}/container.jpg", getExecutableDir().c_str());
-	auto awesomeface_png = std::format("{}/awesomeface.png", getExecutableDir().c_str());
-
-
+	auto container_jpg = std::format("{}/container.jpg", getExecutableDir().string());
+	auto awesomeface_png = std::format("{}/awesomeface.png", getExecutableDir().string());
 
 	stbi_set_flip_vertically_on_load(true);
 	auto image = readImage(container_jpg.c_str());
@@ -244,8 +242,8 @@ int main(int, char**)
 	// 无论如何，要修改其他VAO的话，都需要先调用glBindVertexArray。因此，除非确实有必要，否则我们通常不会解除VAO或VBO的绑定。
     	// glBindVertexArray(0); 
 
-	auto vs_path = std::format("{}/Shader.vs", getExecutableDir().c_str());
-	auto fs_path = std::format("{}/Shader.fs", getExecutableDir().c_str());
+	auto vs_path = std::format("{}/Shader.vs", getExecutableDir().string());
+	auto fs_path = std::format("{}/Shader.fs", getExecutableDir().string());
 	Shader shader(vs_path.c_str(), fs_path.c_str());
 	
 

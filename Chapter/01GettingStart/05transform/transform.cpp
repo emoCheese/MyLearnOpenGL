@@ -228,8 +228,8 @@ int main(int, char**)
 	// 无论如何，要修改其他VAO的话，都需要先调用glBindVertexArray。因此，除非确实有必要，否则我们通常不会解除VAO或VBO的绑定。
     	// glBindVertexArray(0); 
 
-	auto vs_path = std::format("{}/Shader.vs", getExecutableDir().c_str());
-	auto fs_path = std::format("{}/Shader.fs", getExecutableDir().c_str());
+	auto vs_path = (getExecutableDir() / "Shader.vs").string();
+	auto fs_path = (getExecutableDir() / "Shader.fs").string();
 	Shader shader(vs_path.c_str(), fs_path.c_str());
 	
 

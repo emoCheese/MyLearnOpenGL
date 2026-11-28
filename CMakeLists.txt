@@ -24,8 +24,7 @@ project(LearnOpenGL VERSION 0.1.0 LANGUAGES C CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_COMPILE_FEATURES OFF)
-
+set(CMAKE_CXX_EXTENSIONS OFF)
 # ---------------------------------------------------------------------------
 # glfw3：vcpkg 的 config 包优先，找不到再找系统安装（头文件 + 库文件）。
 # 两种情况都统一成 glfw 目标，子目录只链接 glfw 即可。

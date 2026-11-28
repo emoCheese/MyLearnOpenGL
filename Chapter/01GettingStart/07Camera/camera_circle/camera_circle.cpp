@@ -7,6 +7,7 @@
 #include "glm/ext/matrix_float4x4.hpp"
 #include "shader.h"
 #include <format>
+#include <span>
 #include <sys/types.h>
 
 #define STB_IMAGE_IMPLEMENTATION
@@ -177,8 +178,10 @@ int main(int, char**)
 	/// 纹理加载生成
 	/// =================================================
 
-	auto container_jpg = std::format("{}/container.jpg", getExecutableDir().c_str());
-	auto awesomeface_png = std::format("{}/awesomeface.png", getExecutableDir().c_str());
+	std::filesystem::path base_dir = getExecutableDir();
+	auto container_jpg = (base_dir / "container.jpg").string();
+	auto awesomeface_png = (base_dir / "awesomeface.png").string();
+
 
 
 
@@ -252,8 +255,8 @@ int main(int, char**)
 	// 无论如何，要修改其他VAO的话，都需要先调用glBindVertexArray。因此，除非确实有必要，否则我们通常不会解除VAO或VBO的绑定。
     	// glBindVertexArray(0); 
 
-	auto vs_path = std::format("{}/Shader.vs", getExecutableDir().c_str());
-	auto fs_path = std::format("{}/Shader.fs", getExecutableDir().c_str());
+	auto vs_path = std::format("{}/Shader.vs", getExecutableDir().string());
+	auto fs_path = std::format("{}/Shader.fs", getExecutableDir().string());
 	Shader shader(vs_path.c_str(), fs_path.c_str());
 	
 
